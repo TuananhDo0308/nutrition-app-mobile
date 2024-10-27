@@ -17,20 +17,20 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
 
 const SignUp = () => {
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
   const handleOnSubmit = () => {
     alert(user);
   };
+
   return (
-    <TouchableWithoutFeedback
-      style={styles.container}
-      onPress={() => Keyboard.dismiss()}
-    >
-      <View style={styles.innerContainer}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0} // Thêm `keyboardVerticalOffset` cho Android
+      >
+        <View style={styles.innerContainer}>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
               <Text style={[styles.title, styles.titleColor]}>Register</Text>
@@ -76,7 +76,7 @@ const SignUp = () => {
 
             <CustomButton onPress={handleOnSubmit} title={"Sign up"} />
           </View>
-        </KeyboardAvoidingView>
+        </View>
 
         {/* Giữ nội dung này cố định ở dưới */}
         <View style={styles.titleBottom}>
@@ -90,7 +90,7 @@ const SignUp = () => {
         </View>
 
         <StatusBar style="auto" />
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingBottom: 20, // Thêm padding để tránh tràn khi bàn phím mở
+    paddingBottom: 20,
   },
 
   titleContainer: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 
   titleBottom: {
     position: "absolute",
-    bottom: 30, // Cố định cách đáy một khoảng nhất định
+    bottom: 30,
     alignSelf: "center",
   },
 });
