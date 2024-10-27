@@ -5,6 +5,7 @@ import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import CheckBox from "../component/checkbox";
 
 const SignIn = () => {
   return (
@@ -52,7 +53,8 @@ const SignIn = () => {
       </View>
 
       <View style={styles.functionContainer}>
-        <View>
+        <View style={styles.checkboxContainer}>
+          <CheckBox />
           <Text>Remember me</Text>
         </View>
         <Text>Forget password ?</Text>
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "space-between",
   },
 
   titleContainer: {
@@ -117,12 +118,18 @@ const styles = StyleSheet.create({
     width: 300,
     flexDirection: "row",
     justifyContent: "space-between",
-    borderWidth: 1,
+    marginTop: 40,
+  },
+
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   titleBottom: {
-    marginBottom: 15,
+    bottom: 30,
     alignItems: "center",
+    position: 'absolute',
   },
 });
 

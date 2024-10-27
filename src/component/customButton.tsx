@@ -20,7 +20,7 @@ const styles = StyleSheet.create ({
         width: 300,
         height: 45,
         backgroundColor: '#62C998',
-        alignSelf: 'center',
+        alignItems: 'center',
         marginTop: 8,
     },
     CustomButtonText: {
