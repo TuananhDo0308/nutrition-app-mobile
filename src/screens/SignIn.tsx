@@ -1,14 +1,21 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import CheckBox from "../component/checkbox";
+import TextTouch from "../component/textTouch";
 
-const SignIn = () => {
+
+const SignIn = ({navigation}) => {
+
+
+
   return (
+
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
 
       <View style={styles.inputContainer}>
@@ -62,16 +69,14 @@ const SignIn = () => {
 
       <View style={styles.titleBottom}>
         <Text style={{}}>
-          Have an account already ?
-          <Text style={{ color: "#62C998" }} onPress={() => alert("pressed")}>
-            {" "}
-            Login
-          </Text>
+          Don't have account ?
         </Text>
+        <TextTouch title=' Sign up' onPress={() => navigation.navigate('signUp')} TextStyle={{color: "#62C998"}}/>
       </View>
 
       <StatusBar style="auto" />
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -127,9 +132,9 @@ const styles = StyleSheet.create({
   },
 
   titleBottom: {
-    bottom: 30,
+    marginTop: 230,
     alignItems: "center",
-    position: 'absolute',
+    flexDirection: 'row',
   },
 });
 

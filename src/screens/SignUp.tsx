@@ -15,13 +15,15 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
+import TextTouch from "../component/textTouch";
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const handleOnSubmit = () => {
     alert(user);
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -33,8 +35,8 @@ const SignUp = () => {
         <View style={styles.innerContainer}>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.title, styles.titleColor]}>Register</Text>
-              <Text style={styles.title}>Create your own account</Text>
+              <Text style={{fontSize: 25, fontWeight: 'bold',color: '#62C998'}}>Register</Text>
+              <Text style={{fontSize: 20}}>Create your own account</Text>
             </View>
 
             <View style={styles.inputSection}>
@@ -76,17 +78,17 @@ const SignUp = () => {
 
             <CustomButton onPress={handleOnSubmit} title={"Sign up"} />
           </View>
+
+          
+
         </View>
 
         {/* Giữ nội dung này cố định ở dưới */}
         <View style={styles.titleBottom}>
           <Text style={{ color: "#000" }}>
             Have an account already?
-            <Text style={{ color: "#62C998" }} onPress={() => alert("pressed")}>
-              {" "}
-              Login
-            </Text>
           </Text>
+          <TextTouch title=" Login" onPress={() => navigation.navigate('signIn')} TextStyle={{color: "#62C998"}}/>
         </View>
 
         <StatusBar style="auto" />
@@ -104,21 +106,12 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: 120,
   },
 
   titleContainer: {
     width: 300,
     marginBottom: 13,
-  },
-
-  title: {
-    fontSize: 25,
-  },
-
-  titleColor: {
-    color: "#62C998",
-    fontWeight: "bold",
   },
 
   inputContainer: {
@@ -150,9 +143,11 @@ const styles = StyleSheet.create({
 
   titleBottom: {
     position: "absolute",
-    bottom: 30,
+    bottom: 23,
     alignSelf: "center",
+    flexDirection: 'row',
   },
+
 });
 
 export default SignUp;

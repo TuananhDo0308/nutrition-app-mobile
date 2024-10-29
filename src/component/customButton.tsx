@@ -1,14 +1,17 @@
 import React from "react"
-import { TouchableOpacity, Text, StyleSheet } from "react-native"
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from "react-native"
 
 interface CustomButtonProps {
     onPress: () => void;
     title: string;
+    buttonStyle?: ViewStyle;
+    textStyle?: TextStyle;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ onPress, title }) => (
-    <TouchableOpacity onPress={onPress} style={styles.CustomButtonContainer}>
-        <Text style={styles.CustomButtonText}>
+const CustomButton: React.FC<CustomButtonProps> = ({ onPress, title, buttonStyle, textStyle }) => (
+    <TouchableOpacity onPress={onPress} 
+    style={StyleSheet.flatten([styles.CustomButtonContainer, buttonStyle])}>
+        <Text style={StyleSheet.flatten([styles.CustomButtonText, textStyle])}>
             {title}
         </Text>
     </TouchableOpacity>
@@ -25,10 +28,10 @@ const styles = StyleSheet.create ({
     },
     CustomButtonText: {
         flex: 1,
-        paddingTop: 4,
+        paddingTop: 8,
         alignSelf: 'center',
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 20,
     }
 })
 
