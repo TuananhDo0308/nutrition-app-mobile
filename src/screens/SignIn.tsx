@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -19,14 +20,17 @@ import CheckBox from "../component/checkbox";
 import TextTouch from "../component/textTouch";
 
 const SignIn = ({ navigation }) => {
-
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
+      >
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
@@ -65,7 +69,9 @@ const SignIn = ({ navigation }) => {
                 secureTextEntry={!isPasswordVisible}
                 onChangeText={setPassword}
               />
-              <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+              <Pressable
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              >
                 <FontAwesome5
                   style={styles.icon}
                   name={isPasswordVisible ? "eye-slash" : "eye"}
@@ -97,7 +103,7 @@ const SignIn = ({ navigation }) => {
         </View>
 
         <StatusBar style="auto" />
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
