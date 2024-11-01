@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Pressable,
 } from "react-native";
 import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -17,13 +18,13 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
 import TextTouch from "../component/textTouch";
 
-const SignUp = ({navigation}) => {
+const SignUp = ({ navigation }) => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswoedVisible, setIsPasswordVisible] = useState(false);
   const handleOnSubmit = () => {
     alert(user);
   };
-
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -35,8 +36,12 @@ const SignUp = ({navigation}) => {
         <View style={styles.innerContainer}>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
-              <Text style={{fontSize: 25, fontWeight: 'bold',color: '#62C998'}}>Register</Text>
-              <Text style={{fontSize: 20}}>Create your own account</Text>
+              <Text
+                style={{ fontSize: 25, fontWeight: "bold", color: "#62C998" }}
+              >
+                Register
+              </Text>
+              <Text style={{ fontSize: 20 }}>Create your own account</Text>
             </View>
 
             <View style={styles.inputSection}>
@@ -64,31 +69,32 @@ const SignUp = ({navigation}) => {
               <TextInput
                 style={styles.textInput}
                 placeholder="******"
-                secureTextEntry
+                secureTextEntry={!isPasswoedVisible}
                 value={password}
                 onChangeText={setPassword}
               />
-              <FontAwesome5
-                style={styles.icon}
-                name="eye"
-                size={20}
-                color="black"
-              />
+              <Pressable onPress={() => setIsPasswordVisible(!isPasswoedVisible)}>
+                <FontAwesome5
+                  style={styles.icon}
+                  name={isPasswoedVisible ? "eye-slash" : "eye"}
+                  size={20}
+                  color="black"
+                />
+              </Pressable>
             </View>
 
             <CustomButton onPress={handleOnSubmit} title={"Sign up"} />
           </View>
-
-          
-
         </View>
 
         {/* Giữ nội dung này cố định ở dưới */}
         <View style={styles.titleBottom}>
-          <Text style={{ color: "#000" }}>
-            Have an account already?
-          </Text>
-          <TextTouch title=" Login" onPress={() => navigation.navigate('signIn')} TextStyle={{color: "#62C998"}}/>
+          <Text style={{ color: "#000" }}>Have an account already?</Text>
+          <TextTouch
+            title=" Login"
+            onPress={() => navigation.navigate("signIn")}
+            TextStyle={{ color: "#62C998" }}
+          />
         </View>
 
         <StatusBar style="auto" />
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingBottom: 120,
+    paddingBottom: 70,
   },
 
   titleContainer: {
@@ -143,11 +149,10 @@ const styles = StyleSheet.create({
 
   titleBottom: {
     position: "absolute",
-    bottom: 23,
+    bottom: 30,
     alignSelf: "center",
-    flexDirection: 'row',
+    flexDirection: "row",
   },
-
 });
 
 export default SignUp;
