@@ -5,7 +5,6 @@ import CustomButton from "../component/customButton";
 import TextTouch from "../component/textTouch";
 
 import { NavigationProp, useNavigation } from "@react-navigation/native";
->>>>>>> main
 
 const Start = () => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();

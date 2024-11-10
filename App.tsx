@@ -4,10 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignUp from "./src/screens/SignUp";
 import SignIn from "./src/screens/SignIn";
-import Start from "./src/screens/start";;
 import Home from "./src/screens/Home";
 import { ReduxProvider } from "./src/libs/provider";
-const Stack = createNativeStackNavigator();
 import "./global.css";
 import { verifyInstallation } from 'nativewind';
 import { DefaultTheme, PaperProvider } from "react-native-paper";
@@ -16,7 +14,7 @@ import Start from "./src/screens/start";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import HomeScreen from "./src/screens/HomeScreen";
-
+import { StyleSheet } from "react-native";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
