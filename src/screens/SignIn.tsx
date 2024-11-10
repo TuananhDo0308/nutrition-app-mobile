@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   Keyboard,
@@ -7,9 +6,8 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableWithoutFeedback,
+ Text,
   View,
   Image,
 } from "react-native";
@@ -17,6 +15,7 @@ import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+
 
 import TextTouch from "../component/textTouch";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -33,7 +32,7 @@ const SignIn = () => {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView 
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
@@ -58,52 +57,35 @@ const SignIn = () => {
           </View>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
-              <Text
-                style={{ fontSize: 25, color: "#62C998", fontWeight: "bold" }}
-              >
+              <Text style={{ fontSize: 25, fontWeight: "bold" }} className="text-blue-800">
                 Welcome back
               </Text>
-              <Text style={{ fontSize: 20 }}>Login to your account</Text>
+              <Text className="text-blue-200"  style={{ backgroundColor: theme.colors.primary }} >Login to your account</Text>
             </View>
 
             <View style={styles.inputSection}>
-              <FontAwesome
-                style={styles.icon}
-                name="user-circle-o"
-                size={20}
-                color="black"
-              />
+              <FontAwesome style={styles.icon} name="user-circle-o" size={20} color="black" />
               <TextInput
+              
                 style={styles.textInput}
                 placeholder="Enter your email"
-                onChangeText={setUser}
+                onChangeText={setUserInfo}
               />
             </View>
 
-            <View style={styles.inputSection}>
-              <Fontisto
-                style={[styles.icon, { marginLeft: 17, marginRight: 17 }]}
-                name="locked"
-                size={20}
-                color="black"
-              />
-              <TextInput
+            <View  style={styles.inputSection}>
+              <Fontisto style={[styles.icon, { marginLeft: 17, marginRight: 17 }]} name="locked" size={20} color="black" />
+              <TextInput 
                 style={styles.textInput}
                 placeholder="******"
                 secureTextEntry={!isPasswordVisible}
                 onChangeText={setPassword}
               />
-              <Pressable
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                <FontAwesome5
-                  style={styles.icon}
-                  name={isPasswordVisible ? "eye-slash" : "eye"}
-                  size={20}
-                  color="black"
-                />
+              <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                <FontAwesome5 style={styles.icon} name={isPasswordVisible ? "eye-slash" : "eye"} size={20} color="black" />
               </Pressable>
             </View>
+
 
             <CustomButton onPress={() => alert("pressed")} title={"Login"} />
           </View>
@@ -117,20 +99,12 @@ const SignIn = () => {
           </View>
         </View>
 
-        <View style={styles.titleBottom}>
-          <Text style={{}}>Don't have account ?</Text>
-          <TextTouch
-            title=" Sign up"
-            onPress={() => navigation.navigate("signUp")}
-            TextStyle={{ color: "#62C998" }}
-          />
-        </View>
-
         <StatusBar style="auto" />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

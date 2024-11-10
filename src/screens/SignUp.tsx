@@ -24,6 +24,7 @@ const SignUp = () => {
 
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
 
+
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswoedVisible, setIsPasswordVisible] = useState(false);
