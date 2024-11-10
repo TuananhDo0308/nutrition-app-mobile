@@ -18,7 +18,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
 import TextTouch from "../component/textTouch";
 
-const SignUp = ({ navigation }) => {
+const SignUp = ({ navigation }:any) => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswoedVisible, setIsPasswordVisible] = useState(false);

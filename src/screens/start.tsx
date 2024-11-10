@@ -5,7 +5,7 @@ import CustomButton from "../component/customButton";
 import TextTouch from "../component/textTouch";
 import { useNavigation } from "@react-navigation/native";
 
-const Start = ({ navigation }) => {
+const Start = ({ navigation }:any) => {
 
 
   return (
