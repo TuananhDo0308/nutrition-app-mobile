@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { clearUser } from "../slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hook";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
-const Home = ({ navigation }: any) => {
+const Home = () => {
   const user = useAppSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
+  const navigation: NavigationProp<RootStackParamList> = useNavigation();
 
   const handleLogout = () => {
     dispatch(clearUser());

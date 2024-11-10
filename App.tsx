@@ -37,6 +37,7 @@ export default function App() {
         <Stack.Screen name="start" component={Start} options={{headerShown: false}} />
         <Stack.Screen name="signIn" component={SignIn} options={{headerShown: false}} />
         <Stack.Screen name="signUp" component={SignUp} options={{headerShown: false}} />
+        <Stack.Screen name="home" component={Home} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>

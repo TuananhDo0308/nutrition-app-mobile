@@ -21,15 +21,21 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import TextTouch from "../component/textTouch";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import CustomCheckbox from "../component/checkbox";
+import { useAppDispatch } from "../hooks/hook";
+import { setUser } from "../slices/userSlice/userSlice";
 
 const SignIn = () => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
-
-  const [user, setUser] = useState("");
+  const dispatch = useAppDispatch()
+  const [userinfo, setUserInfo] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
-  const handleOnSubmit = () => {};
+  const handleOnSubmit = () => {
+    dispatch(setUser({ name: userinfo, email: `${password}` }));
+    navigation.navigate("home");
+
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -76,7 +82,7 @@ const SignIn = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Enter your email"
-                onChangeText={setUser}
+                onChangeText={setUserInfo}
               />
             </View>
 
@@ -105,7 +111,7 @@ const SignIn = () => {
               </Pressable>
             </View>
 
-            <CustomButton onPress={() => alert("pressed")} title={"Login"} />
+            <CustomButton title="Sign In" onPress={handleOnSubmit} />
           </View>
 
           <View style={styles.functionContainer}>
