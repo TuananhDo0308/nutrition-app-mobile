@@ -10,6 +10,7 @@ import {
   Keyboard,
   Platform,
   Pressable,
+  Image,
 } from "react-native";
 import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -17,8 +18,12 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
 import TextTouch from "../component/textTouch";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
-const SignUp = ({ navigation }) => {
+const SignUp = () => {
+
+  const navigation: NavigationProp<RootStackParamList> = useNavigation();
+
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswoedVisible, setIsPasswordVisible] = useState(false);
@@ -34,6 +39,23 @@ const SignUp = ({ navigation }) => {
         keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0} // Thêm `keyboardVerticalOffset` cho Android
       >
         <View style={styles.innerContainer}>
+        <View style={{ position: "absolute", right: 0, top: -50 }}>
+            <Image
+              style={{ right: -20 }}
+              source={require("../Icon/TopBack.png")}
+            />
+            <Image
+              style={{ position: "absolute", right: 0, top: 120 }}
+              source={require("../Icon/TopBackSmall.png")}
+            />
+          </View>
+          <View style={{ position: "absolute", left: -30, bottom: -30 }}>
+            <Image style={{position: 'absolute', bottom: 0}} source={require("../Icon/BottomBack.png")} />
+            <Image
+              style={{ position: "absolute", bottom: 0 }}
+              source={require("../Icon/BottomBackSmall.png")}
+            />
+          </View>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
               <Text
