@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
-const CustomCheckbox = () => {
-  const [checked, setChecked] = useState(false);
+interface CustomCheckboxProps {
+  onPress: () => void;
+  checked: boolean;
+}
+
+const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ onPress, checked }) => {
 
   return (
-    <TouchableOpacity onPress={() => setChecked(!checked)}>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.checkbox}>
         <View style={checked && styles.checkboxChecked}></View>
       </View>
