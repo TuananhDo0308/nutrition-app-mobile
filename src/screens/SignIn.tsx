@@ -11,18 +11,25 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  Image,
 } from "react-native";
 import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import CheckBox from "../component/checkbox";
-import TextTouch from "../component/textTouch";
 
-const SignIn = ({ navigation }) => {
+import TextTouch from "../component/textTouch";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import CustomCheckbox from "../component/checkbox";
+
+const SignIn = () => {
+  const navigation: NavigationProp<RootStackParamList> = useNavigation();
+
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const handleOnSubmit = () => {};
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -32,6 +39,23 @@ const SignIn = ({ navigation }) => {
         keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
       >
         <View style={styles.container}>
+          <View style={{ position: "absolute", right: 0, top: -50 }}>
+            <Image
+              style={{ right: -20 }}
+              source={require("../Icon/TopBack.png")}
+            />
+            <Image
+              style={{ position: "absolute", right: 0, top: 120 }}
+              source={require("../Icon/TopBackSmall.png")}
+            />
+          </View>
+          <View style={{ position: "absolute", left: 0, bottom: 0 }}>
+            <Image style={{position: 'absolute', bottom: 0}} source={require("../Icon/BottomBack.png")} />
+            <Image
+              style={{ position: "absolute", bottom: 0 }}
+              source={require("../Icon/BottomBackSmall.png")}
+            />
+          </View>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
               <Text
@@ -86,7 +110,7 @@ const SignIn = ({ navigation }) => {
 
           <View style={styles.functionContainer}>
             <View style={styles.checkboxContainer}>
-              <CheckBox />
+              <CustomCheckbox onPress={() => setRemember(!remember)} checked={remember}/>
               <Text>Remember me</Text>
             </View>
             <Text>Forget password ?</Text>
@@ -113,6 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+    width: "100%",
   },
 
   titleContainer: {
