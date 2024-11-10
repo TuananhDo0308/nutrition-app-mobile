@@ -7,37 +7,28 @@ import {
   Pressable,
   StyleSheet,
   TouchableWithoutFeedback,
-  View,Text
+ Text,
+  View,
+  Image,
 } from "react-native";
 import CustomButton from "../component/customButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { TextInput, Button, Card, IconButton, useTheme } from "react-native-paper";
 
-import CheckBox from "../component/checkbox";
+
 import TextTouch from "../component/textTouch";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { clearUser, setUser } from "../slices/userSlice/userSlice";
-import { useAppDispatch, useAppSelector } from "../hooks/hook";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import CustomCheckbox from "../component/checkbox";
 
-export const SignIn = ({ navigation }: any) => {
-  const [userinfo, setUserInfo] = useState("");
+const SignIn = () => {
+  const navigation: NavigationProp<RootStackParamList> = useNavigation();
+
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const user = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-
-  const handleLogin = () => {
-    if (userinfo && password) {
-      dispatch(setUser({ name: password, email: userinfo }));
-      navigation.navigate("home");
-    } else {
-      alert("Please enter your email and password");
-    }
-  };  const theme = useTheme();
-
+  const [remember, setRemember] = useState(false);
+  const handleOnSubmit = () => {};
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -47,6 +38,23 @@ export const SignIn = ({ navigation }: any) => {
         keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
       >
         <View style={styles.container}>
+          <View style={{ position: "absolute", right: 0, top: -50 }}>
+            <Image
+              style={{ right: -20 }}
+              source={require("../Icon/TopBack.png")}
+            />
+            <Image
+              style={{ position: "absolute", right: 0, top: 120 }}
+              source={require("../Icon/TopBackSmall.png")}
+            />
+          </View>
+          <View style={{ position: "absolute", left: 0, bottom: 0 }}>
+            <Image style={{position: 'absolute', bottom: 0}} source={require("../Icon/BottomBack.png")} />
+            <Image
+              style={{ position: "absolute", bottom: 0 }}
+              source={require("../Icon/BottomBackSmall.png")}
+            />
+          </View>
           <View style={styles.inputContainer}>
             <View style={styles.titleContainer}>
               <Text style={{ fontSize: 25, fontWeight: "bold" }} className="text-blue-800">
@@ -78,7 +86,16 @@ export const SignIn = ({ navigation }: any) => {
               </Pressable>
             </View>
 
-            <CustomButton onPress={handleLogin} title={"Login"} />
+
+            <CustomButton onPress={() => alert("pressed")} title={"Login"} />
+          </View>
+
+          <View style={styles.functionContainer}>
+            <View style={styles.checkboxContainer}>
+              <CustomCheckbox onPress={() => setRemember(!remember)} checked={remember}/>
+              <Text>Remember me</Text>
+            </View>
+            <Text>Forget password ?</Text>
           </View>
         </View>
 
@@ -94,6 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+    width: "100%",
   },
 
   titleContainer: {
