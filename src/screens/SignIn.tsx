@@ -1,200 +1,159 @@
-import React from "react";
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-  Image,
-} from "react-native";
-import CustomButton from "../component/customButton";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-
-import TextTouch from "../component/textTouch";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, TextInput, Button, useTheme } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import CustomCheckbox from "../component/checkbox";
-import { useAppDispatch } from "../hooks/hook";
+import { useAppDispatch, useAppSelector } from "../hooks/hook";
 import { setUser } from "../slices/userSlice/userSlice";
+import GradientBlurBackground from "../libs/background";
+import { toggleTheme } from "../slices/uiSlice/themeMode";
 
 const SignIn = () => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const [userinfo, setUserInfo] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [remember, setRemember] = useState(false);
-  const handleOnSubmit = () => {
-    dispatch(setUser({ name: userinfo, email: `${password}` }));
-    navigation.navigate("home");
+  const theme = useTheme();
+  const user = useAppSelector((state) => state.user?.name);
 
+  useEffect(() => {
+    if (user) {
+      navigation.navigate("home");
+    }
+  }, [user, navigation]);
+
+  const handleOnSubmit = () => {
+    dispatch(setUser({ name: userinfo, email: password }));
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
-      >
-        <View style={styles.container}>
-          <View style={{ position: "absolute", right: 0, top: -50 }}>
-            <Image
-              style={{ right: -20 }}
-              source={require("../Icon/TopBack.png")}
-            />
-            <Image
-              style={{ position: "absolute", right: 0, top: 120 }}
-              source={require("../Icon/TopBackSmall.png")}
-            />
-          </View>
-          <View style={{ position: "absolute", left: 0, bottom: 0 }}>
-            <Image style={{position: 'absolute', bottom: 0}} source={require("../Icon/BottomBack.png")} />
-            <Image
-              style={{ position: "absolute", bottom: 0 }}
-              source={require("../Icon/BottomBackSmall.png")}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.titleContainer}>
-              <Text
-                style={{ fontSize: 25, color: "#62C998", fontWeight: "bold" }}
-              >
-                Welcome back
-              </Text>
-              <Text style={{ fontSize: 20 }}>Login to your account</Text>
-            </View>
+    <GradientBlurBackground>
+      <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
+        <View style={styles.formContainer}>
+          {/* Tiêu đề */}
+          <View></View>
+          <View>
+            <Text style={[styles.title, { color: theme.colors.primary }]}>
+              Welcome back
+            </Text>
+            <Text style={[styles.subtitle, { color: theme.colors.secondary }]}>
+              Login to your account
+            </Text>
 
-            <View style={styles.inputSection}>
-              <FontAwesome
-                style={styles.icon}
-                name="user-circle-o"
-                size={20}
-                color="black"
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="Enter your email"
-                onChangeText={setUserInfo}
-              />
-            </View>
+            {/* Email Input */}
+            <TextInput
+              mode="outlined"
+              label="Email"
+              value={userinfo}
+              onChangeText={setUserInfo}
+              style={[styles.input, { marginTop: 30 }]}
+              left={<TextInput.Icon icon="account" />}
+            />
 
-            <View style={styles.inputSection}>
-              <Fontisto
-                style={[styles.icon, { marginLeft: 17, marginRight: 17 }]}
-                name="locked"
-                size={20}
-                color="black"
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="******"
-                secureTextEntry={!isPasswordVisible}
-                onChangeText={setPassword}
-              />
-              <Pressable
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                <FontAwesome5
-                  style={styles.icon}
-                  name={isPasswordVisible ? "eye-slash" : "eye"}
-                  size={20}
-                  color="black"
+            {/* Password Input */}
+            <TextInput
+              mode="outlined"
+              label="Password"
+              value={password}
+              secureTextEntry={!isPasswordVisible}
+              onChangeText={setPassword}
+              style={styles.input}
+              left={<TextInput.Icon icon="lock" />}
+              right={
+                <TextInput.Icon
+                  icon={isPasswordVisible ? "eye-off" : "eye"}
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
                 />
-              </Pressable>
-            </View>
+              }
+            />
+            {/* Nút "Forgot Password" */}
+            <Button
+              mode="text"
+              compact
+              onPress={() => dispatch(toggleTheme())}
+              labelStyle={{ color: theme.colors.secondary }}
+              style={styles.forgotButton}
+            >
+              Forgot password?
+            </Button>
 
-            <CustomButton title="Sign In" onPress={handleOnSubmit} />
+            {/* Nút "Sign In" */}
+            <Button
+              mode="contained"
+              onPress={handleOnSubmit}
+              labelStyle={{
+                fontFamily: "Montserrat_700Bold",
+                fontSize: 18,
+                color: theme.colors.background,
+              }}
+            >
+              Sign In
+            </Button>
           </View>
 
-          <View style={styles.functionContainer}>
-            <View style={styles.checkboxContainer}>
-              <CustomCheckbox onPress={() => setRemember(!remember)} checked={remember}/>
-              <Text>Remember me</Text>
-            </View>
-            <Text>Forget password ?</Text>
+          {/* Footer Links */}
+          <View style={styles.footer}>
+            <Text style={{ color: theme.colors.tertiary }}>
+              Don't have an account?
+            </Text>
+            <Button
+              onPress={() => navigation.navigate("signUp")}
+              compact
+              labelStyle={{ color: theme.colors.primary }}
+            >
+              Sign up
+            </Button>
           </View>
         </View>
-
-        <View style={styles.titleBottom}>
-          <Text style={{}}>Don't have account ?</Text>
-          <TextTouch
-            title=" Sign up"
-            onPress={() => navigation.navigate("signUp")}
-            TextStyle={{ color: "#62C998" }}
-          />
-        </View>
-
-        <StatusBar style="auto" />
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+      </SafeAreaView>
+    </GradientBlurBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
     width: "100%",
-  },
-
-  titleContainer: {
-    width: 300,
-    marginBottom: 13,
-  },
-
-  inputContainer: {
-    marginTop: 208,
-  },
-
-  icon: {
-    margin: 7,
-    marginLeft: 15,
-    marginRight: 15,
-  },
-
-  inputSection: {
-    flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 5,
-    width: 300,
-    height: 45,
-    marginBottom: 7,
-    marginTop: 7,
+    alignItems: "center",
   },
-
-  textInput: {
+  formContainer: {
+    width: 320,
+    alignItems: "stretch",
+    justifyContent: "space-between",
     flex: 1,
   },
-
-  functionContainer: {
-    width: 300,
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "Montserrat_900Black",
+  },
+  subtitle: {
+    fontSize: 20,
+    marginBottom: 20,
+    fontFamily: "Montserrat_500Medium",
+  },
+  input: {
+    width: "100%",
+    marginBottom: 15,
+  },
+  forgotButton: {
+    alignSelf: "flex-end",
+  },
+  button: {
+    marginTop: 10,
+    width: "100%",
+    paddingVertical: 2,
+    borderRadius: 1000,
+    alignItems: "center",
+  },
+  footer: {
+    justifyContent: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 40,
-  },
-
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  titleBottom: {
-    position: "absolute",
-    bottom: 30,
-    alignItems: "center",
-    flexDirection: "row",
   },
 });
 

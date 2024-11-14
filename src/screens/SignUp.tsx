@@ -1,180 +1,168 @@
-import React from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-  Pressable,
-  Image,
-} from "react-native";
-import CustomButton from "../component/customButton";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { useState } from "react";
-import TextTouch from "../component/textTouch";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, TextInput, Button, useTheme } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useAppDispatch } from "../hooks/hook";
+import GradientBlurBackground from "../libs/background";
 
 const SignUp = () => {
-
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
-
-
-  const [user, setUser] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isPasswoedVisible, setIsPasswordVisible] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const theme = useTheme();
+
   const handleOnSubmit = () => {
-    alert(user);
+    if (password === confirmPassword) {
+      navigation.navigate("home");
+    } else {
+      alert("Passwords do not match.");
+    }
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0} // Thêm `keyboardVerticalOffset` cho Android
-      >
-        <View style={styles.innerContainer}>
-        <View style={{ position: "absolute", right: 0, top: -50 }}>
-            <Image
-              style={{ right: -20 }}
-              source={require("../Icon/TopBack.png")}
-            />
-            <Image
-              style={{ position: "absolute", right: 0, top: 120 }}
-              source={require("../Icon/TopBackSmall.png")}
-            />
-          </View>
-          <View style={{ position: "absolute", left: -30, bottom: -30 }}>
-            <Image style={{position: 'absolute', bottom: 0}} source={require("../Icon/BottomBack.png")} />
-            <Image
-              style={{ position: "absolute", bottom: 0 }}
-              source={require("../Icon/BottomBackSmall.png")}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.titleContainer}>
-              <Text
-                style={{ fontSize: 25, fontWeight: "bold", color: "#62C998" }}
-              >
-                Register
+    <GradientBlurBackground xOffset={100} yOffset={100}>
+      <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
+        <View style={styles.formContainer}>
+          {/* Header */}
+          <View></View>
+          <View>
+            <View>
+              <Text style={[styles.title, { color: theme.colors.primary }]}>
+                Create Account
               </Text>
-              <Text style={{ fontSize: 20 }}>Create your own account</Text>
+              <Text
+                style={[styles.subtitle, { color: theme.colors.secondary }]}
+              >
+                Sign up to get started
+              </Text>
             </View>
 
-            <View style={styles.inputSection}>
-              <FontAwesome
-                style={styles.icon}
-                name="user-circle-o"
-                size={20}
-                color="black"
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="Enter your email"
-                value={user}
-                onChangeText={setUser}
-              />
-            </View>
+            {/* Name Input */}
+            <TextInput
+              mode="outlined"
+              label="Full Name"
+              value={name}
+              onChangeText={setName}
+              style={[styles.input, { marginTop: 30 }]}
+              left={<TextInput.Icon icon="account" />}
+            />
 
-            <View style={styles.inputSection}>
-              <Fontisto
-                style={[styles.icon, { marginLeft: 17, marginRight: 17 }]}
-                name="locked"
-                size={20}
-                color="black"
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="******"
-                secureTextEntry={!isPasswoedVisible}
-                value={password}
-                onChangeText={setPassword}
-              />
-              <Pressable onPress={() => setIsPasswordVisible(!isPasswoedVisible)}>
-                <FontAwesome5
-                  style={styles.icon}
-                  name={isPasswoedVisible ? "eye-slash" : "eye"}
-                  size={20}
-                  color="black"
+            {/* Email Input */}
+            <TextInput
+              mode="outlined"
+              label="Enter your email"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+              left={<TextInput.Icon icon="email" />}
+            />
+
+            {/* Password Input */}
+            <TextInput
+              mode="outlined"
+              label="Password"
+              value={password}
+              secureTextEntry={!isPasswordVisible}
+              onChangeText={setPassword}
+              style={styles.input}
+              left={<TextInput.Icon icon="lock" />}
+              right={
+                <TextInput.Icon
+                  icon={isPasswordVisible ? "eye-off" : "eye"}
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
                 />
-              </Pressable>
-            </View>
+              }
+            />
 
-            <CustomButton onPress={handleOnSubmit} title={"Sign up"} />
+            {/* Confirm Password Input */}
+            <TextInput
+              mode="outlined"
+              label="Confirm Password"
+              value={confirmPassword}
+              secureTextEntry={!isPasswordVisible}
+              onChangeText={setConfirmPassword}
+              style={styles.input}
+              left={<TextInput.Icon icon="lock" />}
+            />
+
+            {/* Sign Up Button */}
+            <Button
+              mode="contained"
+              onPress={handleOnSubmit}
+              style={styles.button}
+              labelStyle={{
+                fontFamily: "Montserrat_700Bold",
+                fontSize: 18,
+                color: theme.colors.background,
+              }}
+            >
+              Sign Up
+            </Button>
+          </View>
+
+          {/* Footer Links */}
+          <View style={styles.footer}>
+            <Text style={{ color: theme.colors.tertiary }}>
+              Already have an account?
+            </Text>
+            <Button
+              onPress={() => navigation.navigate("signIn")}
+              compact
+              labelStyle={{ color: theme.colors.primary }}
+            >
+              Sign In
+            </Button>
           </View>
         </View>
-
-        {/* Giữ nội dung này cố định ở dưới */}
-        <View style={styles.titleBottom}>
-          <Text style={{ color: "#000" }}>Have an account already?</Text>
-          <TextTouch
-            title=" Login"
-            onPress={() => navigation.navigate("signIn")}
-            TextStyle={{ color: "#62C998" }}
-          />
-        </View>
-
-        <StatusBar style="auto" />
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+      </SafeAreaView>
+    </GradientBlurBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  innerContainer: {
-    flex: 1,
+    width: "100%",
     justifyContent: "center",
-    paddingBottom: 70,
-  },
-
-  titleContainer: {
-    width: 300,
-    marginBottom: 13,
-  },
-
-  inputContainer: {
     alignItems: "center",
   },
-
-  icon: {
-    margin: 7,
-    marginLeft: 15,
-    marginRight: 15,
-  },
-
-  inputSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 5,
-    width: 300,
-    height: 45,
-    marginBottom: 7,
-    marginTop: 7,
-  },
-
-  textInput: {
+  formContainer: {
+    width: 320,
+    alignItems: "stretch",
+    justifyContent: "space-between",
     flex: 1,
   },
-
-  titleBottom: {
-    position: "absolute",
-    bottom: 30,
-    alignSelf: "center",
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "Montserrat_900Black",
+  },
+  subtitle: {
+    fontSize: 20,
+    marginBottom: 20,
+    fontFamily: "Montserrat_500Medium",
+  },
+  input: {
+    width: "100%",
+    marginBottom: 15,
+  },
+  button: {
+    marginTop: 10,
+    width: "100%",
+    paddingVertical: 2,
+    borderRadius: 1000,
+    alignItems: "center",
+  },
+  footer: {
+    justifyContent: "center",
     flexDirection: "row",
+    alignItems: "center",
+    marginTop: 40,
   },
 });
 

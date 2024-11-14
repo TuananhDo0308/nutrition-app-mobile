@@ -5,15 +5,18 @@ import { combineReducers } from 'redux';
 import { PersistConfig } from 'redux-persist';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist/es/constants';
 import userReducer from '../slices/userSlice/userSlice';
+import themeReducer from '../slices/uiSlice/themeMode';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  theme:themeReducer,
+
 });
 
 const persistConfig: PersistConfig<any> = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user'], // Chỉ persist slice 'user'
+  whitelist: ['user','theme'], // Chỉ persist slice 'user'
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,113 +1,76 @@
 import React from "react";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignUp from "./src/screens/SignUp";
+import { Provider as PaperProvider } from "react-native-paper";
+import { useAppTheme } from "./src/libs/theme";
 import SignIn from "./src/screens/SignIn";
-import Home from "./src/screens/Home";
-import { ReduxProvider } from "./src/libs/provider";
-import "./global.css";
-import { verifyInstallation } from 'nativewind';
-import { DefaultTheme, PaperProvider } from "react-native-paper";
-import { useAppSelector } from "./src/hooks/hook";
+import SignUp from "./src/screens/SignUp";
+import HomeTabs from "./src/screens/temp"
 import Start from "./src/screens/start";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ProfileScreen from "./src/screens/ProfileScreen";
-import HomeScreen from "./src/screens/HomeScreen";
-import { StyleSheet } from "react-native";
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator();
+import { ReduxProvider } from "./src/libs/provider";
+import { useFonts } from "expo-font";
+import {
+  Montserrat_100Thin,
+  Montserrat_200ExtraLight,
+  Montserrat_300Light,
+  Montserrat_400Regular,
+  Montserrat_500Medium,
+  Montserrat_600SemiBold,
+  Montserrat_700Bold,
+  Montserrat_800ExtraBold,
+  Montserrat_900Black,
+} from "@expo-google-fonts/montserrat";
+import { useAppSelector } from "./src/hooks/hook";
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: 'tomato',
-    secondary: 'yellow',
-  },
-};
-export default function App() {
-  verifyInstallation();
+const Stack = createNativeStackNavigator();
+
+const AppContent = () => {
+  const theme = useAppTheme();
+  const user = useAppSelector((state) => state.user?.name);
+
   return (
-
-    <ReduxProvider>
-      <PaperProvider theme={theme}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="start" component={Start} options={{headerShown: false}} />
-        <Stack.Screen name="signIn" component={SignIn} options={{headerShown: false}} />
-        <Stack.Screen name="signUp" component={SignUp} options={{headerShown: false}} />
-        <Stack.Screen name="home" component={Home} options={{headerShown: false}} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {/* Conditional navigation based on user authentication */}
+          {user ? (
+            // Use HomeTabs instead of Home to provide bottom tab navigation
+            <Stack.Screen name="HomeTabs" component={HomeTabs} />
+          ) : (
+            <>
+              <Stack.Screen name="start" component={Start} />
+              <Stack.Screen name="signIn" component={SignIn} />
+              <Stack.Screen name="signUp" component={SignUp} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
-    </ReduxProvider>
-    /*
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            marginBottom: 40,
-            marginHorizontal: 40,
-            borderRadius: 30,
-            position: "absolute",
-            backgroundColor: "#444444",
-          },
-          tabBarShowLabel: false,
-        }}
-      >
-        <Tab.Screen
-          name="home"
-          options={{
-            tabBarIcon: () => <Image source={require("./src/Icon/Home.png")} />,
-          }}
-          component={HomeScreen}
-        />
-        <Tab.Screen
-          name="statistical"
-          options={{
-            tabBarIcon: () => (
-              <Image source={require("./src/Icon/statistical.png")} />
-            ),
-          }}
-          component={HomeScreen}
-        />
-        <Tab.Screen
-          name="scan"
-          options={{
-            tabBarIcon: () => <View style={styles.scan}><Image source={require("./src/Icon/scan.png")} /></View>,
-          }}
-          component={ProfileScreen}
-        />
-        <Tab.Screen
-          name="notepad"
-          options={{
-            tabBarIcon: () => (
-              <Image source={require("./src/Icon/notepad.png")} />
-            ),
-          }}
-          component={ProfileScreen}
-        />
-        <Tab.Screen
-          name="profile"
-          options={{
-            tabBarIcon: () => (
-              <Image source={require("./src/Icon/profile.png")} />
-            ),
-          }}
-          component={ProfileScreen}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>*/
   );
-}
+};
 
-const styles = StyleSheet.create({
-  scan: {
-    position: 'absolute',
-    bottom: '50%',
-    backgroundColor: '#F9E287',
-    padding: 10,
-    borderRadius: 50,
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    Montserrat_100Thin,
+    Montserrat_200ExtraLight,
+    Montserrat_300Light,
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Montserrat_800ExtraBold,
+    Montserrat_900Black,
+  });
+
+  if (!fontsLoaded) {
+    return null;
   }
-})
+
+  return (
+    <ReduxProvider>
+      <AppContent />
+    </ReduxProvider>
+  );
+};
+
+export default App;
