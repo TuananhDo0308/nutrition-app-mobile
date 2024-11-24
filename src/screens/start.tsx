@@ -33,14 +33,14 @@ const Start = () => {
           </View>
           <View>
             <Image
-              style={{ borderWidth: 1, top: 225 }}
+              style={{ top: 225 }}
               source={require("../Icon/TopBackCircle.png")}
             />
           </View>
         </View>
         <View>
           <CustomButton
-            onPress={() => navigation.navigate("signIn")}
+            onPress={() => navigation.navigate("heightQuiz")}
             title={"Get Started"}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.text}

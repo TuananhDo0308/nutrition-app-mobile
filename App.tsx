@@ -21,6 +21,7 @@ import {
   Montserrat_900Black,
 } from "@expo-google-fonts/montserrat";
 import { useAppSelector } from "./src/hooks/hook";
+import HeightQuiz from "./src/screens/HeightQuiz";
 
 const Stack = createNativeStackNavigator();
 

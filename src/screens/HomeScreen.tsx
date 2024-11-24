@@ -8,28 +8,31 @@ import {
 } from "react-native";
 import { useAppSelector } from "../hooks/hook";
 import { RootState } from "../store/store";
-import { Icon, MD3Colors, ProgressBar } from "react-native-paper";
+import { Icon, MD3Colors, ProgressBar, useTheme } from "react-native-paper";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import GradientBlurBackground from "../libs/background";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const user = useAppSelector((state: RootState) => state.user);
+  const theme = useTheme();
+  const heightBar = useBottomTabBarHeight(); 
   return (
     <GradientBlurBackground>
       <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
-        <ScrollView style={{ width: "100%" }}>
+        <ScrollView style={{ width: "100%" }} showsVerticalScrollIndicator={false}>
           <View
             style={{
               flex: 1,
               alignItems: "center",
               marginTop: 30,
+              paddingBottom: heightBar,
             }}
           >
             <View style={{ width: "90%" }}>
               <View style={{ paddingBottom: 26 }}>
                 <View style={{ marginBottom: 36 }}>
-                  <Text style={{ fontWeight: "bold", fontSize: 35 }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 35 , color: theme.colors.secondary }}>
                     Morning, {user?.name}
                   </Text>
                 </View>
@@ -101,7 +104,7 @@ const HomeScreen = () => {
                         </Text>
                       </View>
                       <View style={{ marginTop: 90, alignItems: "center" }}>
-                        <Text style={{ fontWeight: "bold" }}>132g{}</Text>
+                        <Text style={{ fontWeight: "bold" }}>200{}</Text>
                         <Text>of 200g{}</Text>
                       </View>
                     </View>
@@ -145,7 +148,7 @@ const HomeScreen = () => {
                         </Text>
                       </View>
                       <View style={{ marginTop: 90, alignItems: "center" }}>
-                        <Text style={{ fontWeight: "bold" }}>10g{}</Text>
+                        <Text style={{ fontWeight: "bold" }}>32g{}</Text>
                         <Text>of 32g{}</Text>
                       </View>
                     </View>
@@ -165,7 +168,7 @@ const HomeScreen = () => {
                     />
                   </TouchableOpacity>
                   <TouchableOpacity>
-                    <Text> Today, Jul 26</Text>
+                    <Text style={{ color: theme.colors.secondary }}> Today, Jul 26</Text>
                   </TouchableOpacity>
                   <TouchableOpacity>
                     <Icon
@@ -245,6 +248,7 @@ const HomeScreen = () => {
                   </View>
                 </View>
               </View>
+
             </View>
           </View>
         </ScrollView>

@@ -23,6 +23,8 @@ import CustomIcon from "../Icon/CameraIcon/Group";
 import { useNavigation } from "@react-navigation/native";
 import CustomCenterIcon from "../component/customCameraButton";
 import HomeScreen from "./HomeScreen";
+import HeightQuiz from "./HeightQuiz";
+import SettingScreen from "./SettingScreen";
 
 
 const HomeTabs = () => {
@@ -88,14 +90,14 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Menu"
-        component={ProfileScreen}
+        component={HeightQuiz}
         options={{
           tabBarLabel: "", // Hide tab label
         }}
       />
       <Tab.Screen
         name="Setting"
-        component={ProfileScreen}
+        component={SettingScreen}
         options={{
           tabBarLabel: "", // Hide tab label
         }}
