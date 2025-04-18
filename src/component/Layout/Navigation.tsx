@@ -7,24 +7,25 @@ import {
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import Home from "./Home";
-import ProfileScreen from "./ProfileScreen";
-import { useAppSelector } from "../hooks/hook";
+import Home from "../../screens/Home";
+import ProfileScreen from "../../screens/ProfileScreen";
+import { useAppSelector } from "../../hooks/hook";
 import Octicons from "@expo/vector-icons/Octicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import RoundedSquareIcon from "../Icon/CameraIcon/2";
-import CameraIcon from "../Icon/CameraIcon/1";
-import SolidRoundedSquareIcon from "../Icon/CameraIcon/3";
-import Notepad from "./NotePadScreen";
+import RoundedSquareIcon from "../../Icon/CameraIcon/2";
+import CameraIcon from "../../Icon/CameraIcon/1";
+import SolidRoundedSquareIcon from "../../Icon/CameraIcon/3";
+import Notepad from "../../screens/NotePadScreen";
 const Tab = createBottomTabNavigator();
-import CustomIcon from "../Icon/CameraIcon/Group";
+import CustomIcon from "../../Icon/CameraIcon/Group";
 import { useNavigation } from "@react-navigation/native";
-import CustomCenterIcon from "../component/customCameraButton";
-import HomeScreen from "./HomeScreen";
-import HeightQuiz from "./HeightQuiz";
-import SettingScreen from "./SettingScreen";
+import CustomCenterIcon from "../ui/customCameraButton";
+import HomeScreen from "../../screens/HomeScreen";
+import HeightQuiz from "../../screens/Quiz/HeightQuiz";
+import SettingScreen from "../../screens/SettingScreen";
+import StatisticalScreen from "../../screens/StatisticalScreen";
 
 
 const HomeTabs = () => {
@@ -75,14 +76,14 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Statistic"
-        component={Home}
+        component={StatisticalScreen}
         options={{
           tabBarLabel: "", // Hide tab label
         }}
       />
       <Tab.Screen
         name="Center"
-        component={Home} // Central component can navigate to Home or any other component you want
+        component={CustomCenterIcon}
         options={{
           tabBarIcon: () => <CustomCenterIcon />,
           tabBarLabel: "",
@@ -97,7 +98,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Setting"
-        component={SettingScreen}
+        component={Home}
         options={{
           tabBarLabel: "", // Hide tab label
         }}

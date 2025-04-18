@@ -3,10 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { useAppTheme } from "./src/libs/theme";
-import SignIn from "./src/screens/SignIn";
-import SignUp from "./src/screens/SignUp";
-import HomeTabs from "./src/screens/temp"
-import Start from "./src/screens/start";
+import SignIn from "./src/screens/Signin/SignIn";
+import SignUp from "./src/screens/Signin/SignUp";
+import HomeTabs from "./src/component/Layout/Navigation"
+import Start from "./src/screens/Signin/Welcome";
 import { ReduxProvider } from "./src/libs/provider";
 import { useFonts } from "expo-font";
 import {
@@ -21,7 +21,8 @@ import {
   Montserrat_900Black,
 } from "@expo-google-fonts/montserrat";
 import { useAppSelector } from "./src/hooks/hook";
-import HeightQuiz from "./src/screens/HeightQuiz";
+import HeightQuiz from "./src/screens/Quiz/HeightQuiz";
+import { AppRegistry } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -75,3 +76,4 @@ const App = () => {
 };
 
 export default App;
+AppRegistry.registerComponent('main', () => App);

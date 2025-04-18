@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, FlatList, Text, View } from "react-native";
-import GradientBlurBackground from "../libs/background";
+import GradientBlurBackground from "../component/Layout/background";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const fakeData = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}: This is a sample text entry.`);

@@ -102,7 +102,7 @@ export const darkTheme = {
   colors: {
     ...PaperDarkTheme.colors,
     primary: '#85F193',
-    background: '#1E1E1E',
+    background: '#000000',
     secondary: '#FFFFFF',
     tertiary: '#FFFFFF',
   },

@@ -10,10 +10,10 @@ import {
   Text,
   View,
 } from "react-native";
-import GradientBlurBackground from "../libs/background";
+import GradientBlurBackground from "../../component/Layout/background";
 import { Button, ProgressBar, useTheme } from "react-native-paper";
-import { useAppDispatch } from "../hooks/hook";
-import { toggleTheme } from "../slices/uiSlice/themeMode";
+import { useAppDispatch } from "../../hooks/hook";
+import { toggleTheme } from "../../slices/uiSlice/themeMode";
 
 
 const { width, height } = Dimensions.get("window");

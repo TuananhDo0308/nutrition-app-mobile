@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Animated, TouchableWithoutFeedback, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import CustomIcon from "../Icon/CameraIcon/Group";
+import CustomIcon from "../../Icon/CameraIcon/Group";
 
 const CustomCenterIcon = () => {
   const scaleAnim = useRef(new Animated.Value(1)).current;

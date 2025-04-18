@@ -5,7 +5,7 @@ import { RootState } from "../store/store";
 import { clearUser } from "../slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hook";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import GradientBlurBackground from "../libs/background";
+import GradientBlurBackground from "../component/Layout/background";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toggleTheme } from "../slices/uiSlice/themeMode";
 

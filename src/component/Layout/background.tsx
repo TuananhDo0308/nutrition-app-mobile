@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from 'react-native-paper';
-import { useAppSelector } from '../hooks/hook';
+import { useAppSelector } from '../../hooks/hook';
 
 interface GradientBlurBackgroundProps {
   children?: React.ReactNode;
@@ -40,9 +40,8 @@ const GradientBlurBackground: React.FC<GradientBlurBackgroundProps> = ({
         <KeyboardAvoidingView
           style={[styles.container, { backgroundColor }]}
         >
-          {/* Hiển thị hình ảnh nền */}
           <Image
-            source={require('../Icon/temp.png')}
+            source={require('../../Icon/temp.png')}
             style={[
               styles.image,
               {
@@ -55,7 +54,7 @@ const GradientBlurBackground: React.FC<GradientBlurBackgroundProps> = ({
           <View style={styles.contentContainer}>
             <BlurView
               style={StyleSheet.absoluteFill}
-              intensity={80}
+              intensity={100}
               tint={blurType}
             />
             <View
