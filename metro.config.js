@@ -1,12 +1,12 @@
-const { getDefaultConfig } = require("expo/metro-config");
+const { getDefaultConfig } = require("@react-native/metro-config");
 const { withNativeWind } = require("nativewind/metro");
 
-const config = getDefaultConfig(__dirname);
+let config = getDefaultConfig(__dirname);
 
-// Apply NativeWind configuration
-withNativeWind(config, { input: "./global.css" });
+// ✅ Áp dụng NativeWind & gán lại
+config = withNativeWind(config, { input: "./global.css" });
 
-// Apply SVG transformer configuration
+// ✅ SVG transformer
 config.transformer = {
   ...config.transformer,
   babelTransformerPath: require.resolve("react-native-svg-transformer"),

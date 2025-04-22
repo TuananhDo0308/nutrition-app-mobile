@@ -21,23 +21,29 @@ import {
   Montserrat_900Black,
 } from "@expo-google-fonts/montserrat";
 import { useAppSelector } from "./src/hooks/hook";
-import HeightQuiz from "./src/screens/Quiz/HeightQuiz";
 import { AppRegistry } from "react-native";
+import OnboardingFlow from "./src/screens/OnboardingFlow";
 
 const Stack = createNativeStackNavigator();
 
+
 const AppContent = () => {
   const theme = useAppTheme();
-  const user = useAppSelector((state) => state.user?.name);
+  const user = useAppSelector((state) => state.user);
 
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* Conditional navigation based on user authentication */}
-          {user ? (
-            // Use HomeTabs instead of Home to provide bottom tab navigation
-            <Stack.Screen name="HomeTabs" component={HomeTabs} />
+          {/* Conditional navigation based on user authentication and status */}
+          {user?.token ? (
+            !user.status ? (
+              // If user exists and status is true, show Quiz screens
+              <Stack.Screen name="QuizStack" component={OnboardingFlow} />
+            ) : (
+              // If user exists and status is false, show HomeTabs
+              <Stack.Screen name="HomeTabs" component={HomeTabs} />
+            )
           ) : (
             <>
               <Stack.Screen name="start" component={Start} />

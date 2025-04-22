@@ -1,103 +1,155 @@
-// components/MealCard.tsx
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Icon } from "react-native-paper";
+import type React from "react"
+import { View, Text, StyleSheet } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
+import { useTheme } from "react-native-paper"
 
 interface MealItem {
-  name: string;
-  kcal: number;
+  name: string
+  kcal: number
 }
 
 interface MealCardProps {
-  mealName: string;
-  totalKcal: number;
-  items: MealItem[];
+  mealName: string
+  totalKcal: number
+  items: MealItem[]
+  iconName?: string
 }
 
-const MealCard: React.FC<MealCardProps> = ({ mealName, totalKcal, items }) => {
+const MealCard: React.FC<MealCardProps> = ({ mealName, totalKcal, items, iconName = "restaurant-outline" }) => {
+  const theme = useTheme()
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.dark ? "#232323" : "#F5F5F5",
+          shadowColor: theme.dark ? "#000000" : "#CCCCCC",
+        },
+      ]}
+    >
       <View style={styles.header}>
         <View style={styles.titleWrapper}>
-          <Icon source={require("../../Icon/breakfast.png")} size={30} />
-          <Text style={styles.title}>{mealName}</Text>
+          <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + "20" }]}>
+            <Ionicons name={iconName} size={24} color={theme.colors.primary} />
+          </View>
+          <Text style={[styles.title, { color: theme.colors.primary, fontFamily: "Montserrat_700Bold" }]}>
+            {mealName}
+          </Text>
         </View>
         <View style={styles.kcalWrapper}>
-          <Text style={styles.kcal}>{totalKcal} </Text>
-          <Text style={styles.kcalUnit}>kcal</Text>
+          <Text style={[styles.kcal, { color: theme.colors.primary, fontFamily: "Montserrat_600SemiBold" }]}>
+            {totalKcal}{" "}
+          </Text>
+          <Text style={[styles.kcalUnit, { color: theme.colors.primary, fontFamily: "Montserrat_400Regular" }]}>
+            kcal
+          </Text>
         </View>
       </View>
-      <View style={styles.itemsContainer}>
+      <View
+        style={[
+          styles.itemsContainer,
+          {
+            backgroundColor: theme.dark ? "#343434" : "#FFFFFF",
+          },
+        ]}
+      >
         {items.map((item, index) => (
-          <View key={index} style={styles.item}>
-            <Text style={styles.itemName}>{item.name}</Text>
+          <View key={index} style={[styles.item, index < items.length - 1 && styles.itemBorder]}>
+            <Text style={[styles.itemName, { color: theme.colors.secondary, fontFamily: "Montserrat_500Medium" }]}>
+              {item.name}
+            </Text>
             <View style={styles.itemKcal}>
-              <Text style={styles.itemKcalValue}>{item.kcal} </Text>
-              <Text style={styles.itemKcalUnit}>kcal</Text>
+              <Text
+                style={[styles.itemKcalValue, { color: theme.colors.secondary, fontFamily: "Montserrat_500Medium" }]}
+              >
+                {item.kcal}{" "}
+              </Text>
+              <Text
+                style={[
+                  styles.itemKcalUnit,
+                  { color: theme.colors.secondary, opacity: 0.7, fontFamily: "Montserrat_400Regular" },
+                ]}
+              >
+                kcal
+              </Text>
             </View>
           </View>
         ))}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
-    backgroundColor: "#232323",
     padding: 17,
     justifyContent: "space-between",
-    height: 191,
+    marginBottom: 16,
     width: "100%",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
     marginBottom: 15,
   },
   titleWrapper: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
   },
   title: {
     fontWeight: "bold",
-    marginLeft: 10,
-    color: "#85F193",
   },
   kcalWrapper: {
     flexDirection: "row",
+    alignItems: "baseline",
   },
   kcal: {
-    color: "#85F193",
     fontSize: 16,
   },
   kcalUnit: {
-    color: "#85F193",
+    fontSize: 12,
   },
   itemsContainer: {
-    borderRadius: 20,
-    backgroundColor: "#343434",
+    borderRadius: 16,
     padding: 15,
   },
   item: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    paddingVertical: 8,
+  },
+  itemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(150, 150, 150, 0.2)",
   },
   itemName: {
-    color: "#ffffff",
+    flex: 1,
   },
   itemKcal: {
     flexDirection: "row",
+    alignItems: "baseline",
   },
   itemKcalValue: {
-    color: "#ffffff",
+    fontSize: 14,
   },
   itemKcalUnit: {
-    color: "#ffffff",
+    fontSize: 12,
   },
-});
+})
 
-export default MealCard;
+export default MealCard

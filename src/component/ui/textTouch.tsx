@@ -13,7 +13,7 @@ const TextTouch: React.FC<TextTouchProps> = ({onPress, title, TextStyle, styleCo
         <TouchableOpacity onPress={onPress} style={styleContainer}>
             <Text style={TextStyle}>{title}</Text>
         </TouchableOpacity>
-    );
+    )
 }
 
 export default TextTouch

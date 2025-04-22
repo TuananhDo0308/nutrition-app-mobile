@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Animated, TouchableWithoutFeedback, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import CustomIcon from "../../Icon/CameraIcon/Group";
+import * as Haptics from "expo-haptics"
 
 const CustomCenterIcon = () => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -11,6 +12,8 @@ const CustomCenterIcon = () => {
       toValue: 1.2,
       useNativeDriver: true,
     }).start();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+
   };
 
   const handlePressOut = () => {
@@ -18,7 +21,6 @@ const CustomCenterIcon = () => {
       toValue: 1,
       useNativeDriver: true,
     }).start(() => {
-      // Open camera after animation completes
       openCamera();
     });
   };
@@ -46,7 +48,7 @@ const CustomCenterIcon = () => {
   return (
     <TouchableWithoutFeedback onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View style={[styles.centerIconContainer, { transform: [{ scale: scaleAnim }] }]}>
-        <CustomIcon width={51} height={51} />
+        <CustomIcon />
       </Animated.View>
     </TouchableWithoutFeedback>
   );

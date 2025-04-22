@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, TextInput, Button, useTheme } from "react-native-paper";
+import { Text, TextInput, Button, useTheme, Snackbar } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { setUser } from "../../slices/userSlice/userSlice";
 import GradientBlurBackground from "../../component/Layout/background";
 import { toggleTheme } from "../../slices/uiSlice/themeMode";
+import axios from "axios";
+import { apiLinks } from "../../utils";
 
 type RootStackParamList = {
   home: undefined;
@@ -22,6 +24,8 @@ const SignIn = () => {
   const [userinfo, setUserInfo] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -29,10 +33,56 @@ const SignIn = () => {
     }
   }, [user, navigation]);
 
-  const handleSignIn = () => {
-    if (!userinfo || !password) return;
-    dispatch(setUser({ name: userinfo, email: password }));
+  const handleSignIn = async () => {
+    // Validation
+    if (!userinfo || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Gọi API đăng nhập
+      const response = await axios.post(
+        apiLinks.authentication.signIn, // Thay bằng URL thực tế
+        {
+          email: userinfo,
+          password,
+        },
+        {
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Giả định response.data chứa token, image, status, name
+      const { token, image, status, name } = response.data;
+
+      // Lưu thông tin user vào Redux store
+      dispatch(
+        setUser({
+          name,
+          email: userinfo, // Lưu email từ input vì response không có
+          token,
+          image,
+          status,
+        })
+      );
+
+      navigation.navigate("home");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const onDismissSnackBar = () => setError(null);
 
   return (
     <GradientBlurBackground>
@@ -65,6 +115,7 @@ const SignIn = () => {
               style={styles.input}
               left={<TextInput.Icon icon="email" />}
               theme={{ roundness: 12 }}
+              disabled={loading}
             />
 
             <TextInput
@@ -82,6 +133,7 @@ const SignIn = () => {
                 />
               }
               theme={{ roundness: 12 }}
+              disabled={loading}
             />
 
             <Button
@@ -89,17 +141,19 @@ const SignIn = () => {
               onPress={handleSignIn}
               style={styles.signInButton}
               labelStyle={styles.signInButtonText}
-              disabled={!userinfo || !password}
+              disabled={loading || !userinfo || !password}
+              loading={loading}
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </Button>
           </KeyboardAvoidingView>
 
           <Button
             mode="text"
-            onPress={() => dispatch(toggleTheme())}
+            onPress={() => dispatch(toggleTheme())} // Thay bằng hàm reset password nếu cần
             style={styles.forgotButton}
             labelStyle={{ color: theme.colors.secondary }}
+            disabled={loading}
           >
             Forgot password?
           </Button>
@@ -112,11 +166,21 @@ const SignIn = () => {
               mode="text"
               onPress={() => navigation.navigate("signUp")}
               labelStyle={{ color: theme.colors.primary }}
+              disabled={loading}
             >
               Sign up
             </Button>
           </View>
         </View>
+
+        <Snackbar
+          visible={!!error}
+          onDismiss={onDismissSnackBar}
+          duration={3000}
+          style={styles.snackbar}
+        >
+          {error}
+        </Snackbar>
       </SafeAreaView>
     </GradientBlurBackground>
   );
@@ -165,6 +229,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  snackbar: {
+    backgroundColor: "#FF4444",
+    marginBottom: 20,
+    marginHorizontal: 16,
   },
 });
 

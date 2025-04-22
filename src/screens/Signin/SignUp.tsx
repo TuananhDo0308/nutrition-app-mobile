@@ -35,22 +35,30 @@ const SignUp = () => {
       setError("Passwords do not match");
       return;
     }
-
+  
     setLoading(true);
     setError(null);
-
+  
     try {
       // Gọi API đăng ký
-      const response = await axios.post("http://192.168.69.216:8000/api/user/registration", {
-        name,
-        email,
-        password,
-        username:name
-      });
-
-
-      if (response.data.success) {
-        // Đăng ký thành công, chuyển hướng đến màn hình home
+      const response = await axios.post(
+        "https://chat.aaateammm.online/api/user/registration",
+        {
+          name,
+          email,
+          password,
+          username: name, // Username được đặt bằng name theo yêu cầu
+        },
+        {
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      // Kiểm tra response
+      if (response.data.message === "Register successful.") {
         navigation.navigate("signIn");
       } else {
         setError(response.data.message || "Registration failed");

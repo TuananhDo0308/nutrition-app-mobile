@@ -1,43 +1,48 @@
-// components/NutrientProgress.tsx
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import VerticalProgressBar from "../ui/CustomProgessBar";
-
+import type React from "react"
+import { View, Text, StyleSheet } from "react-native"
+import VerticalProgressBar from "../ui/CustomProgessBar"
+import { useTheme } from "react-native-paper"
 
 interface Nutrient {
-  name: string;
-  value: number;
-  goal: number;
-  unit: string;
-  progress: number;
+  name: string
+  value: number
+  goal: number
+  unit: string
+  progress: number
 }
 
 interface NutrientProgressProps {
-  nutrients: Nutrient[];
+  nutrients: Nutrient[]
 }
+
 const NutrientProgress: React.FC<NutrientProgressProps> = ({ nutrients }) => {
+  const theme = useTheme()
+
   return (
     <View style={styles.container}>
       {nutrients.map((nutrient, index) => (
         <View key={index} style={styles.nutrient}>
           <View style={styles.progressCol}>
-            <VerticalProgressBar
-              progress={nutrient.progress}
-              color="#85F193"
-            />
+            <VerticalProgressBar backgroundColor={theme.dark ?  "#232323":"#F4F4F4"} progress={nutrient.progress} color={theme.colors.primary} />
           </View>
           <View style={styles.textWrapper}>
-            <Text style={styles.name}>{nutrient.name}</Text>
+            <Text style={[styles.name, { color: theme.dark ? "#FFFFFF" : "#000000" }]}>{nutrient.name}</Text>
             <View style={styles.values}>
-              <Text style={styles.value}>{nutrient.value}{nutrient.unit}</Text>
-              <Text style={styles.goal}>of {nutrient.goal}{nutrient.unit}</Text>
+              <Text style={[styles.value, { color: theme.colors.secondary }]}>
+                {nutrient.value}
+                {nutrient.unit}
+              </Text>
+              <Text style={[styles.goal, { color: theme.colors.secondary, opacity: 0.7 }]}>
+                of {nutrient.goal}
+                {nutrient.unit}
+              </Text>
             </View>
           </View>
         </View>
       ))}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "bold",
-    color: "#ffffff",
+    fontFamily: "Montserrat_700Bold",
     top: 10,
   },
   values: {
@@ -75,10 +80,12 @@ const styles = StyleSheet.create({
   },
   value: {
     fontWeight: "bold",
+    fontFamily: "Montserrat_700Bold",
   },
   goal: {
     fontSize: 12,
+    fontFamily: "Montserrat_400Regular",
   },
-});
+})
 
-export default NutrientProgress;
+export default NutrientProgress

@@ -1,13 +1,18 @@
-const authUrl = 'http://localhost:8000';
+const authUrl = 'https://chat.aaateammm.online';
 
 const apiLinks = {
   authentication:{
     signUp: `${authUrl}/api/user/registration`,
-    signIn: `${authUrl}/signin`,
+    signIn: `${authUrl}/api/user/authentication`,
     signOut: `${authUrl}/signout`,
     refreshToken: `${authUrl}/refresh-token`,
   },
-  homepage: {
+  questions:{
+    base_information: `${authUrl}/api/user/information`,
+    time: `${authUrl}/api/user/time`
+  },
+  food: {
+    input_manual:`${authUrl}/api/food-items`
   }
 };
 

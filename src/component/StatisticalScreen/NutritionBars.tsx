@@ -2,38 +2,56 @@ import type React from "react"
 import { View, Text, StyleSheet } from "react-native"
 import { useTheme } from "react-native-paper"
 
-interface DailyProgressData {
+interface NutritionData {
   day: string
-  calories: number
-  goal: number
+  carbs: number
+  protein: number
+  fat: number
 }
 
-interface DailyProgressBarsProps {
-  data: DailyProgressData[]
+interface NutritionBarsProps {
+  data: NutritionData[]
 }
 
-const DailyProgressBars: React.FC<DailyProgressBarsProps> = ({ data }) => {
+const NutritionBars: React.FC<NutritionBarsProps> = ({ data }) => {
   const theme = useTheme()
+
+  // Define colors for the nutrition segments
+  const nutritionColors = {
+    carbs: theme.colors.primary,
+    protein: "#FFD700", // Yellow for protein
+    fat: "#4682B4", // Blue for fat
+  }
 
   return (
     <View style={styles.container}>
       {data.map((item, index) => (
-        <View key={index} style={styles.barContainer}>
-          <View style={styles.barWrapper}>
+        <View key={index} style={styles.barGroup}>
+          <View style={styles.barContainer}>
             <View
               style={[
-                styles.barBackground,
+                styles.barSegment,
                 {
-                  backgroundColor: theme.dark ? "#444444" : "#EEEEEE",
+                  backgroundColor: nutritionColors.fat,
+                  height: `${item.fat}%`,
                 },
               ]}
             />
             <View
               style={[
-                styles.barFill,
+                styles.barSegment,
                 {
-                  backgroundColor: theme.colors.primary,
-                  height: `${(item.calories / item.goal) * 100}%`,
+                  backgroundColor: nutritionColors.protein,
+                  height: `${item.protein}%`,
+                },
+              ]}
+            />
+            <View
+              style={[
+                styles.barSegment,
+                {
+                  backgroundColor: nutritionColors.carbs,
+                  height: `${item.carbs}%`,
                 },
               ]}
             />
@@ -61,34 +79,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
+    width: "55%",
     height: 120,
-    width: "100%",
-    paddingHorizontal: 8,
   },
-  barContainer: {
+  barGroup: {
     alignItems: "center",
   },
-  barWrapper: {
+  barContainer: {
     width: 12,
     height: 100,
-    position: "relative",
     marginBottom: 8,
+    justifyContent: "flex-end",
   },
-  barBackground: {
-    position: "absolute",
+  barSegment: {
     width: "100%",
-    height: "100%",
-    borderRadius: 6,
-  },
-  barFill: {
-    position: "absolute",
-    width: "100%",
-    bottom: 0,
-    borderRadius: 6,
+    borderRadius: 0,
   },
   dayLabel: {
     fontSize: 12,
   },
 })
 
-export default DailyProgressBars
+export default NutritionBars
