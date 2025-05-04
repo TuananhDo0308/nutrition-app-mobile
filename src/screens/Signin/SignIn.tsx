@@ -89,13 +89,11 @@ const SignIn = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.formContainer}>
           <Text
-            variant="headlineMedium"
             style={[styles.title, { color: theme.colors.primary }]}
           >
             Welcome back
           </Text>
           <Text
-            variant="titleMedium"
             style={[styles.subtitle, { color: theme.colors.secondary }]}
           >
             Login to your account

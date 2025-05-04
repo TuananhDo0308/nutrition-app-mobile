@@ -2,11 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
-import { useAppTheme } from "./src/libs/theme";
 import SignIn from "./src/screens/Signin/SignIn";
 import SignUp from "./src/screens/Signin/SignUp";
 import HomeTabs from "./src/component/Layout/Navigation"
 import Start from "./src/screens/Signin/Welcome";
+import FoodListScreen from "./src/screens/FoodListScreen";
+
 import { ReduxProvider } from "./src/libs/provider";
 import { useFonts } from "expo-font";
 import {
@@ -23,26 +24,27 @@ import {
 import { useAppSelector } from "./src/hooks/hook";
 import { AppRegistry } from "react-native";
 import OnboardingFlow from "./src/screens/OnboardingFlow";
+import { useAppTheme } from "./src/libs/theme";
 
 const Stack = createNativeStackNavigator();
 
 
 const AppContent = () => {
-  const theme = useAppTheme();
+  const theme = useAppTheme(); // get the themed font + colors
   const user = useAppSelector((state) => state.user);
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* Conditional navigation based on user authentication and status */}
           {user?.token ? (
             !user.status ? (
-              // If user exists and status is true, show Quiz screens
               <Stack.Screen name="QuizStack" component={OnboardingFlow} />
             ) : (
-              // If user exists and status is false, show HomeTabs
-              <Stack.Screen name="HomeTabs" component={HomeTabs} />
+              <>
+                <Stack.Screen name="HomeTabs" component={HomeTabs} />
+                <Stack.Screen name="FoodList" component={FoodListScreen} options={{ title: "Food List" }} />
+              </>
             )
           ) : (
             <>

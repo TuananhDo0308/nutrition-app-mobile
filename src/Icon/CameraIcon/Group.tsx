@@ -9,17 +9,8 @@ interface CustomCenterIconProps {
 }
 
 const CustomCenterIcon: React.FC<CustomCenterIconProps> = ({ onPress }) => {
-  const theme = useTheme()
-
-  const handlePress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    if (onPress) {
-      onPress()
-    }
-  }
-
+  const theme=useTheme()
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress} activeOpacity={0.8}>
       <Svg width={51} height={51} viewBox="0 0 51 51" fill="none">
         <Rect
           x="5.66667"
@@ -38,8 +29,7 @@ const CustomCenterIcon: React.FC<CustomCenterIconProps> = ({ onPress }) => {
           strokeLinejoin="round"
         />
       </Svg>
-    </TouchableOpacity>
-  )
+ )
 }
 
 const styles = StyleSheet.create({

@@ -46,7 +46,6 @@ const HomeTabs = () => {
 
   // Custom tab bar button with haptic feedback
   const TabBarButton = ({ onPress, children, accessibilityState }: any) => {
-    const focused = accessibilityState.selected
 
     const handlePress = () => {
       // Trigger light haptic feedback when tab is pressed
@@ -117,10 +116,10 @@ const HomeTabs = () => {
       <Tab.Screen
         name="Center"
         component={Home} // This is a placeholder, the actual component doesn't matter
-        options={{
-          tabBarIcon: () => <CustomCenterIcon />,
+        options={({ navigation }) => ({
+          tabBarIcon: () => <CustomCenterIcon navigation={navigation} />,
           tabBarLabel: "",
-        }}
+        })}
       />
       <Tab.Screen
         name="Menu"

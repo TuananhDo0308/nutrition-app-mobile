@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-nati
 import * as Haptics from "expo-haptics"
 import { useAppDispatch, useAppSelector } from "../hooks/hook"
 import { setThemeColor } from "../slices/themeSlice"
-import { colorPalettes } from "../libs/theme"
+import { colorPalettes, useAppTheme } from "../libs/theme"
 
 interface ThemeSelectorProps {
   title?: string
@@ -22,12 +22,18 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     dispatch(setThemeColor(colorKey))
   }
+  const theme = useAppTheme(); // Sử dụng theme từ useAppTheme
 
   return (
     <View style={styles.container}>
-      {title && <Text style={styles.title}>{title}</Text>}
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-
+{title && (
+        <Text style={[styles.title, { color: theme.colors.secondary }]}>{title}</Text>
+      )}
+      {subtitle && (
+        <Text style={[styles.subtitle, { color: theme.colors.secondary, opacity: 0.7 }]}>
+          {subtitle}
+        </Text>
+      )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorList}>
         {Object.entries(colorPalettes).map(([key, value]) => (
           <TouchableOpacity

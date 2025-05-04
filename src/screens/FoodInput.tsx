@@ -10,6 +10,7 @@ import axios from "axios"
 import { useFocusEffect } from "@react-navigation/native"
 import { apiLinks } from "../utils"
 import { useAppSelector } from "../hooks/hook"
+import GradientBlurBackground from "../component/Layout/background"
 
 interface FoodItem {
   fdcId: number
@@ -101,7 +102,6 @@ const token = useAppSelector(state=>state.user?.token)
       if (response.data.foods.length === 0 && pageNum === 1) {
         showSnackbar("No foods found. Try a different search term.")
       }
-
       setFoods((prev) => (reset ? response.data.foods : [...prev, ...response.data.foods]))
       setTotalPages(response.data.totalPages)
       setPage(pageNum + 1) // Increment page for next load
@@ -209,21 +209,22 @@ const token = useAppSelector(state=>state.user?.token)
       const { amount: calories } = getEnergyInfo(selectedFood.foodNutrients)
       const macros = getMacroNutrients(selectedFood.foodNutrients)
 
-      const foodLogData: FoodLogData = {
+      const foodLogData: FoodLogData[] = [{
         name: selectedFood.description,
         grams,
         calories,
         carbs: macros.carbs,
         fat: macros.fat,
         protein: macros.protein,
-      }
+      }]
 
       // Replace with your actual API endpoint
       await axios.post(apiLinks.food.input_manual, foodLogData, {
         headers: {
+          Accept: "*/*",
           "Content-Type": "application/json",
           "Authorization": token
-        },
+        },   
       })
 
       showSnackbar("Food added successfully!")
@@ -310,7 +311,8 @@ const token = useAppSelector(state=>state.user?.token)
   }
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]}>
+    <GradientBlurBackground>
+    <SafeAreaView style={[styles.safeArea]}>
       <View style={styles.container}>
         <Text style={[styles.title, { color: theme.colors.secondary, fontFamily: "Montserrat_700Bold" }]}>
           Add Food
@@ -465,6 +467,7 @@ const token = useAppSelector(state=>state.user?.token)
         </Snackbar>
       </View>
     </SafeAreaView>
+    </GradientBlurBackground>
   )
 }
 

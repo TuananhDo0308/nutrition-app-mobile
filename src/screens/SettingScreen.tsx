@@ -138,7 +138,7 @@ const SettingScreen = () => {
 
   return (
     <GradientBlurBackground>
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container]}>
       <View style={styles.header}>
         <Text style={[styles.headerTitle, { color: theme.colors.secondary }]}>Settings</Text>
       </View>
@@ -147,22 +147,7 @@ const SettingScreen = () => {
         {/* Account Section */}
         <SectionHeader title="ACCOUNT" />
         <View style={[styles.sectionContainer, { backgroundColor: theme.dark ? "#2A2A2A" : "#FFFFFF" }]}>
-          <SettingItem
-            icon="person"
-            iconType="Ionicons"
-            title="Profile"
-            subtitle="Edit your personal information"
-            onPress={() => console.log("Profile pressed")}
-            rightElement={<Ionicons name="chevron-forward" size={20} color={theme.colors.secondary} opacity={0.4} />}
-          />
-          <SettingItem
-            icon="goals"
-            iconType="MaterialIcons"
-            title="Goals"
-            subtitle="Set and manage your fitness goals"
-            onPress={() => console.log("Goals pressed")}
-            rightElement={<Ionicons name="chevron-forward" size={20} color={theme.colors.secondary} opacity={0.4} />}
-          />
+
           <SettingItem
             icon="log-out"
             iconType="Feather"
@@ -184,30 +169,9 @@ const SettingScreen = () => {
             value={isDarkMode}
             onValueChange={handleThemeToggle}
           />
-          <SwitchSetting
-            icon="notifications"
-            iconType="Ionicons"
-            title="Notifications"
-            subtitle="Receive app notifications"
-            value={notificationsEnabled}
-            onValueChange={(value) => handleToggle(setNotificationsEnabled, value)}
-          />
-          <SwitchSetting
-            icon="alarm"
-            iconType="Ionicons"
-            title="Reminders"
-            subtitle="Daily workout and meal reminders"
-            value={remindersEnabled}
-            onValueChange={(value) => handleToggle(setRemindersEnabled, value)}
-          />
-          <SwitchSetting
-            icon="scale-balance"
-            iconType="MaterialIcons"
-            title="Use Metric System"
-            subtitle="Switch between kg/cm and lb/in"
-            value={useMetric}
-            onValueChange={(value) => handleToggle(setUseMetric, value)}
-          />
+
+
+
         </View>
 
         {/* Theme Colors Section */}
@@ -217,33 +181,6 @@ const SettingScreen = () => {
         </View>
 
         {/* Health Data Section */}
-        <SectionHeader title="HEALTH DATA" />
-        <View style={[styles.sectionContainer, { backgroundColor: theme.dark ? "#2A2A2A" : "#FFFFFF" }]}>
-          <SettingItem
-            icon="fitness"
-            iconType="MaterialIcons"
-            title="Health Profile"
-            subtitle="Update your health measurements"
-            onPress={() => console.log("Health Profile pressed")}
-            rightElement={<Ionicons name="chevron-forward" size={20} color={theme.colors.secondary} opacity={0.4} />}
-          />
-          <SwitchSetting
-            icon="fire"
-            iconType="FontAwesome5"
-            title="Show Calories"
-            subtitle="Display calorie information"
-            value={showCalories}
-            onValueChange={(value) => handleToggle(setShowCalories, value)}
-          />
-          <SwitchSetting
-            icon="sync"
-            iconType="Feather"
-            title="Sync Health Data"
-            subtitle={Platform.OS === "ios" ? "Sync with Apple Health" : "Sync with Google Fit"}
-            value={syncEnabled}
-            onValueChange={(value) => handleToggle(setSyncEnabled, value)}
-          />
-        </View>
 
         {/* App Information */}
         <SectionHeader title="APP INFORMATION" />
@@ -321,7 +258,7 @@ const SettingScreen = () => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: theme.colors.secondary, opacity: 0.5 }]}>
-            © 2023 Fitness Tracker App
+            © 2025 Fitness Tracker App
           </Text>
         </View>
       </ScrollView>
@@ -399,6 +336,7 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: "center",
     paddingVertical: 30,
+    marginBottom:40,
   },
   footerText: {
     fontSize: 12,

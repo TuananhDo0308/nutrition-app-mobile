@@ -1,20 +1,21 @@
-const { getDefaultConfig } = require("@react-native/metro-config");
-const { withNativeWind } = require("nativewind/metro");
+const { getDefaultConfig } = require('@expo/metro-config');
+const { withNativeWind } = require('nativewind/metro');
 
-let config = getDefaultConfig(__dirname);
+/** @type {import('metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
 
-// ✅ Áp dụng NativeWind & gán lại
-config = withNativeWind(config, { input: "./global.css" });
+// Áp dụng NativeWind
+const nativeWindConfig = withNativeWind(config, { input: './global.css' });
 
-// ✅ SVG transformer
-config.transformer = {
-  ...config.transformer,
-  babelTransformerPath: require.resolve("react-native-svg-transformer"),
+// SVG transformer
+nativeWindConfig.transformer = {
+  ...nativeWindConfig.transformer,
+  babelTransformerPath: require.resolve('react-native-svg-transformer'),
 };
-config.resolver = {
-  ...config.resolver,
-  assetExts: config.resolver.assetExts.filter((ext) => ext !== "svg"),
-  sourceExts: [...config.resolver.sourceExts, "svg"],
+nativeWindConfig.resolver = {
+  ...nativeWindConfig.resolver,
+  assetExts: nativeWindConfig.resolver.assetExts.filter((ext) => ext !== 'svg'),
+  sourceExts: [...nativeWindConfig.resolver.sourceExts, 'svg'],
 };
 
-module.exports = config;
+module.exports = nativeWindConfig;

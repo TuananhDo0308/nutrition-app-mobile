@@ -78,13 +78,12 @@ const SignUp = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.formContainer}>
           <Text
-            variant="headlineMedium"
             style={[styles.title, { color: theme.colors.primary }]}
           >
             Create Account
           </Text>
           <Text
-            variant="titleMedium"
+            variant="headlineMedium"
             style={[styles.subtitle, { color: theme.colors.secondary }]}
           >
             Sign up to get started
