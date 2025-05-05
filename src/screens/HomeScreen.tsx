@@ -1,8 +1,7 @@
 "use client"
 
-import { ScrollView, StyleSheet, View, ActivityIndicator, Text, RefreshControl } from "react-native"
 import { useState, useEffect, useCallback } from "react"
-import { useAppSelector } from "../hooks/hook"
+import { ScrollView, StyleSheet, View, Text, RefreshControl, Animated } from "react-native"
 import GradientBlurBackground from "../component/Layout/background"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
@@ -13,9 +12,13 @@ import CalorieTracker from "../component/HomeScreen/CalorieTracker"
 import NutrientProgress from "../component/HomeScreen/NutrientProgress"
 import DateNavigator from "../component/HomeScreen/DateNavigator"
 import MealCard from "../component/HomeScreen/MealCard"
+import SkeletonLoader from "../component/HomeScreen/skeleton"
 import axios from "axios"
 import { format, isToday } from "date-fns"
 import { apiLinks } from "../utils"
+import { Ionicons } from "@expo/vector-icons"
+import { TouchableOpacity } from "react-native"
+import { useAppSelector } from "../hooks/hook"
 
 // Define interfaces for API responses
 interface DailyPlanData {
@@ -60,12 +63,16 @@ const HomeScreen = () => {
   const [foodItemsData, setFoodItemsData] = useState<FoodItemsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [refreshing, setRefreshing] = useState(false) // State for pull-to-refresh
+  const [refreshing, setRefreshing] = useState(false)
+
+  // Animation values
+  const fadeAnim = useState(new Animated.Value(0))[0]
+  const slideAnim = useState(new Animated.Value(20))[0]
 
   // Format date for API requests
   const formatDateForApi = (date: Date) => {
     const year = date.getFullYear()
-    const month = date.getMonth() + 1 // JavaScript months are 0-indexed
+    const month = date.getMonth() + 1
     const day = date.getDate()
     return { year, month, day }
   }
@@ -87,24 +94,18 @@ const HomeScreen = () => {
 
     try {
       // Fetch daily plan data
-      const dailyPlanResponse = await axios.get(
-        apiLinks.food.dailyPlan(year, month, day),
-        {
-          headers: {
-            Authorization: authToken,
-          },
+      const dailyPlanResponse = await axios.get(apiLinks.food.dailyPlan(year, month, day), {
+        headers: {
+          Authorization: authToken,
         },
-      )
+      })
 
       // Fetch food items data
-      const foodItemsResponse = await axios.get(
-        apiLinks.food.dailyPlanFood(year, month, day),
-        {
-          headers: {
-            Authorization: authToken,
-          },
+      const foodItemsResponse = await axios.get(apiLinks.food.dailyPlanFood(year, month, day), {
+        headers: {
+          Authorization: authToken,
         },
-      )
+      })
 
       // Set state with fetched data
       if (dailyPlanResponse.data && dailyPlanResponse.data.data) {
@@ -117,10 +118,10 @@ const HomeScreen = () => {
           totalCarbs: 0,
           totalFats: 0,
           totalProteins: 0,
-          targetCalories: 0,
-          targetCarbs: 0,
-          targetFats: 0,
-          targetProteins: 0,
+          targetCalories: 2000, // Default target
+          targetCarbs: 250,
+          targetFats: 70,
+          targetProteins: 150,
           date: selectedDate.toISOString().split("T")[0],
         })
       }
@@ -135,21 +136,35 @@ const HomeScreen = () => {
           dinner: { totalCalories: 0, items: [] },
         })
       }
+
+      // Animate content when data is loaded
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ]).start()
     } catch (err) {
       console.error("Error fetching data:", err)
-      console.log(apiLinks.food.dailyPlan(year, month, day))
       setError("Failed to load data. Please try again.")
 
+      // Set default values on error
       setDailyPlanData({
         id: "",
         totalCalories: 0,
         totalCarbs: 0,
         totalFats: 0,
         totalProteins: 0,
-        targetCalories: 0,
-        targetCarbs: 0,
-        targetFats: 0,
-        targetProteins: 0,
+        targetCalories: 2000,
+        targetCarbs: 250,
+        targetFats: 70,
+        targetProteins: 150,
         date: selectedDate.toISOString().split("T")[0],
       })
 
@@ -160,9 +175,9 @@ const HomeScreen = () => {
       })
     } finally {
       setIsLoading(false)
-      setRefreshing(false) // Reset refreshing state after fetch
+      setRefreshing(false)
     }
-  }, [selectedDate, authToken])
+  }, [selectedDate, authToken, fadeAnim, slideAnim])
 
   // Fetch data on component mount and when selected date changes
   useEffect(() => {
@@ -172,20 +187,31 @@ const HomeScreen = () => {
   // Handle pull-to-refresh
   const onRefresh = useCallback(() => {
     setRefreshing(true)
+    // Reset animations
+    fadeAnim.setValue(0)
+    slideAnim.setValue(20)
     fetchData()
-  }, [fetchData])
+  }, [fetchData, fadeAnim, slideAnim])
 
   // Handle date navigation
   const handlePreviousDay = () => {
     const prevDate = new Date(selectedDate)
     prevDate.setDate(prevDate.getDate() - 1)
     setSelectedDate(prevDate)
+
+    // Reset animations for new data
+    fadeAnim.setValue(0)
+    slideAnim.setValue(20)
   }
 
   const handleNextDay = () => {
     const nextDate = new Date(selectedDate)
     nextDate.setDate(nextDate.getDate() + 1)
     setSelectedDate(nextDate)
+
+    // Reset animations for new data
+    fadeAnim.setValue(0)
+    slideAnim.setValue(20)
   }
 
   // Calculate calories left and progress
@@ -244,7 +270,7 @@ const HomeScreen = () => {
       if (mealData) {
         result[mealType] = {
           totalKcal: mealData.totalCalories,
-          items: mealData.items.map((item:FoodItem) => ({
+          items: mealData.items.map((item: FoodItem) => ({
             name: item.name,
             kcal: item.calories,
           })),
@@ -255,17 +281,53 @@ const HomeScreen = () => {
     return result
   }
 
-  // Render loading state
-  if (isLoading && !refreshing) {
+  // Render skeleton loading state
+  const renderSkeletonLoading = () => {
     return (
-      <GradientBlurBackground>
-        <SafeAreaView style={[styles.safeArea, { backgroundColor: "transparent" }]}>
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={theme.colors.primary} />
-            <Text style={[styles.loadingText, { color: theme.colors.secondary }]}>Loading your nutrition data...</Text>
+      <View style={styles.skeletonContainer}>
+        {/* Skeleton for UserGreeting */}
+        <View style={styles.skeletonHeader}>
+          <SkeletonLoader width={60} height={60} borderRadius={30} />
+          <View style={{ marginTop: 16 }}>
+            <SkeletonLoader width={120} height={20} style={{ marginBottom: 8 }} />
+            <SkeletonLoader width={200} height={32} />
           </View>
-        </SafeAreaView>
-      </GradientBlurBackground>
+        </View>
+
+        {/* Skeleton for CalorieTracker */}
+        <SkeletonLoader width="100%" height={120} borderRadius={24} style={{ marginBottom: 36 }} />
+
+        {/* Skeleton for NutrientProgress */}
+        <View style={styles.skeletonNutrients}>
+          <SkeletonLoader width={80} height={160} borderRadius={20} />
+          <SkeletonLoader width={80} height={160} borderRadius={20} />
+          <SkeletonLoader width={80} height={160} borderRadius={20} />
+        </View>
+
+        {/* Skeleton for DateNavigator */}
+        <View style={styles.skeletonDate}>
+          <SkeletonLoader width={40} height={40} borderRadius={20} />
+          <SkeletonLoader width={150} height={40} borderRadius={20} />
+          <SkeletonLoader width={40} height={40} borderRadius={20} />
+        </View>
+
+        {/* Skeleton for MealCards */}
+        <SkeletonLoader width="100%" height={180} borderRadius={24} style={{ marginBottom: 20 }} />
+        <SkeletonLoader width="100%" height={180} borderRadius={24} style={{ marginBottom: 20 }} />
+      </View>
+    )
+  }
+
+  // Render error state
+  const renderError = () => {
+    return (
+      <View style={styles.errorContainer}>
+        <Ionicons name="alert-circle-outline" size={48} color={theme.colors.error} />
+        <Text style={[styles.errorText, { color: theme.colors.secondary }]}>{error}</Text>
+        <TouchableOpacity onPress={fetchData} style={[styles.retryButton, { backgroundColor: theme.colors.primary }]}>
+          <Text style={[styles.retryText, { color: "#FFFFFF" }]}>Try Again</Text>
+        </TouchableOpacity>
+      </View>
     )
   }
 
@@ -278,47 +340,73 @@ const HomeScreen = () => {
   return (
     <GradientBlurBackground>
       <SafeAreaView style={[styles.safeArea, { backgroundColor: "transparent" }]}>
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: heightBar + 20 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={theme.colors.primary}
-              colors={[theme.colors.primary]}
-            />
-          }
-        >
-          <View style={styles.container}>
-            <UserGreeting name={user?.name || "Guest"} avatarUrl={user?.image} />
+        {isLoading && !refreshing ? (
+          renderSkeletonLoading()
+        ) : error ? (
+          renderError()
+        ) : (
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: heightBar + 20 }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={theme.colors.primary}
+                colors={[theme.colors.primary]}
+              />
+            }
+          >
+            <Animated.View
+              style={[
+                styles.container,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: slideAnim }],
+                },
+              ]}
+            >
+              <UserGreeting name={user?.name || "Guest"} avatarUrl={user?.image} />
 
-            <CalorieTracker caloriesLeft={caloriesLeft} progress={calorieProgress} />
+              <CalorieTracker caloriesLeft={caloriesLeft} progress={calorieProgress} />
 
-            <NutrientProgress nutrients={nutrientsData} />
+              <NutrientProgress nutrients={nutrientsData} />
 
-            <DateNavigator
-              date={formatDateForDisplay(selectedDate)}
-              onPrevious={handlePreviousDay}
-              onNext={handleNextDay}
-            />
+              <DateNavigator
+                date={formatDateForDisplay(selectedDate)}
+                onPrevious={handlePreviousDay}
+                onNext={handleNextDay}
+              />
 
-            {/* Render only meal cards with items */}
-            {Object.entries(mealsData).map(([mealType, mealData]) =>
-              // Only render meal card if it has items
-              mealData.items.length > 0 ? (
-                <MealCard
-                  key={mealType}
-                  mealName={mealType.charAt(0).toUpperCase() + mealType.slice(1)}
-                  totalKcal={mealData.totalKcal}
-                  items={mealData.items}
-                  iconName={getMealIcon(mealType)}
-                />
-              ) : null,
-            )}
-          </View>
-        </ScrollView>
+              {/* Render only meal cards with items */}
+              {Object.entries(mealsData).map(([mealType, mealData]) =>
+                mealData.items.length > 0 ? (
+                  <MealCard
+                    key={mealType}
+                    mealName={mealType.charAt(0).toUpperCase() + mealType.slice(1)}
+                    totalKcal={mealData.totalKcal}
+                    items={mealData.items}
+                    iconName={getMealIcon(mealType)}
+                  />
+                ) : null,
+              )}
+
+              {/* Empty state if no meals */}
+              {Object.values(mealsData).every((meal) => meal.items.length === 0) && (
+                <View style={styles.emptyState}>
+                  <Ionicons name="restaurant-outline" size={48} color={theme.colors.secondary} />
+                  <Text style={[styles.emptyStateText, { color: theme.colors.secondary }]}>
+                    No meals recorded for this day
+                  </Text>
+                  <TouchableOpacity style={[styles.addMealButton, { backgroundColor: theme.colors.primary }]}>
+                    <Text style={styles.addMealButtonText}>Add Your First Meal</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </Animated.View>
+          </ScrollView>
+        )}
       </SafeAreaView>
     </GradientBlurBackground>
   )
@@ -337,6 +425,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
     paddingHorizontal: "5%",
+  },
+  skeletonContainer: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: 30,
+    paddingHorizontal: "5%",
+  },
+  skeletonHeader: {
+    alignItems: "flex-start",
+    width: "100%",
+    marginBottom: 24,
+  },
+  skeletonNutrients: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    gap: 16,
+    marginBottom: 30,
+  },
+  skeletonDate: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 30,
   },
   loadingContainer: {
     flex: 1,
@@ -357,12 +470,40 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     textAlign: "center",
-    marginBottom: 16,
+    marginVertical: 16,
     fontFamily: "Montserrat_500Medium",
+  },
+  retryButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 24,
   },
   retryText: {
     fontSize: 16,
     fontFamily: "Montserrat_600SemiBold",
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    padding: 20,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 16,
+    fontFamily: "Montserrat_500Medium",
+  },
+  addMealButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    marginTop: 16,
+  },
+  addMealButtonText: {
+    fontSize: 16,
+    fontFamily: "Montserrat_600SemiBold",
+    color: "#FFFFFF",
   },
 })
 
