@@ -7,7 +7,9 @@ import SignUp from "./src/screens/Signin/SignUp";
 import HomeTabs from "./src/component/Layout/Navigation"
 import Start from "./src/screens/Signin/Welcome";
 import FoodListScreen from "./src/screens/FoodListScreen";
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 import { ReduxProvider } from "./src/libs/provider";
 import { useFonts } from "expo-font";
 import {
@@ -25,6 +27,7 @@ import { useAppSelector } from "./src/hooks/hook";
 import { AppRegistry } from "react-native";
 import OnboardingFlow from "./src/screens/OnboardingFlow";
 import { useAppTheme } from "./src/libs/theme";
+import RecipeDetailScreen from "./src/screens/RecipeDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +47,8 @@ const AppContent = () => {
               <>
                 <Stack.Screen name="HomeTabs" component={HomeTabs} />
                 <Stack.Screen name="FoodList" component={FoodListScreen} options={{ title: "Food List" }} />
+                <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} options={{ title: "Food List" }} />
+
               </>
             )
           ) : (

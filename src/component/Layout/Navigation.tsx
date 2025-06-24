@@ -18,6 +18,7 @@ import * as Haptics from "expo-haptics"
 import SettingScreen from "../../screens/SettingScreen"
 import { useTheme } from "react-native-paper"
 import { useRef, useEffect } from "react"
+import RecipeListTab from "../RecipeListTab"
 
 // Custom TabBar Background component that handles platform differences
 const TabBarBackground = ({ isDarkMode }: any) => {
